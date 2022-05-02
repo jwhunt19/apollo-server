@@ -5,10 +5,10 @@ const models = require("./models");
 const typeDefs = gql`
   type Query {
     links: [Link!]!
-  }  
-  
+  }
+
   type Mutation {
-    setLink(url: String!, slug: String!): Link
+    setLink(url: String!): Link
   }
 
   type Link {
@@ -21,10 +21,15 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     links: () => models.Link.findAll()
-  }, 
-  
+  },
+
   Mutation: {
-    setLink: (_, data) => models.Link.create(data)
+    setLink: (_, { url }) => {
+      const date = new Date().getTime();
+      const slug = Math.random().toString(24).slice(2).slice(-4) + date;
+      
+      models.Link.create({ url, slug })
+    }
   }
 };
 
