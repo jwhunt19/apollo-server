@@ -9,7 +9,11 @@
   "keywords": [],
   "dependencies": {
     "apollo-server": "^3.3.0",
-    "graphql": "^15.5.3"
+    "graphql": "^15.5.3",
+    "mysql2": "2.3.3",
+    "sequelize": "6.19.0",
+    "sequelize-cli": "6.4.1",
+    "sqlite3": "5.0.6"
   },
   "devDependencies": {
     "nodemon": "1.18.4"
