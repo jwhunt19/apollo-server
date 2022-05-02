@@ -5,6 +5,10 @@ const models = require("./models");
 const typeDefs = gql`
   type Query {
     links: [Link!]!
+  }  
+  
+  type Mutation {
+    setLink(url: String!, slug: String!): Link
   }
 
   type Link {
@@ -17,7 +21,11 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     links: () => models.Link.findAll()
-  },
+  }, 
+  
+  Mutation: {
+    setLink: (_, data) => models.Link.create(data)
+  }
 };
 
 const server = new ApolloServer({
