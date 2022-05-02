@@ -5,6 +5,7 @@ const models = require("./models");
 const typeDefs = gql`
   type Query {
     links: [Link!]!
+    link(slug: String): [Link]
   }
 
   type Mutation {
@@ -20,18 +21,21 @@ const typeDefs = gql`
 // Provide resolver functions for your schema fields
 const resolvers = {
   Query: {
-    links: () => models.Link.findAll()
+    links: () => models.Link.findAll(),
+    link: (_, { slug }) => models.Link.findAll({ where: { slug } })
   },
 
   Mutation: {
-    setLink: (_, { url, slug}) => {
+    setLink: async (_, { url, slug }) => {
       const date = new Date().getTime();
-      // TODO add unique check
       if (!slug) {
         slug = Math.random().toString(24).slice(2).slice(-4) + date;
       }
-      
-      models.Link.create({ url, slug })
+
+      const slugCheck = await resolvers.Query.link(undefined, { slug });
+      if (slugCheck.length > 0) throw new Error('slug already exists')
+
+      models.Link.create({ url, slug });
     }
   }
 };
