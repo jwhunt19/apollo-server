@@ -8,7 +8,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    setLink(url: String!): Link
+    setLink(url: String!, slug: String): Link
   }
 
   type Link {
@@ -24,9 +24,12 @@ const resolvers = {
   },
 
   Mutation: {
-    setLink: (_, { url }) => {
+    setLink: (_, { url, slug}) => {
       const date = new Date().getTime();
-      const slug = Math.random().toString(24).slice(2).slice(-4) + date;
+      // TODO add unique check
+      if (!slug) {
+        slug = Math.random().toString(24).slice(2).slice(-4) + date;
+      }
       
       models.Link.create({ url, slug })
     }

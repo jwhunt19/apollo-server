@@ -19,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       slug: {
         allowNull: false,
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        unique: true
       }
     },
     {
