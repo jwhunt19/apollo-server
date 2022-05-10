@@ -27,13 +27,18 @@ const resolvers = {
 
   Mutation: {
     setLink: async (_, { url, slug }) => {
-      const date = new Date().getTime();
-      if (!slug) {
-        slug = Math.random().toString(24).slice(2).slice(-4) + date;
+      async function slugCheck() {
+        const result = await resolvers.Query.link(undefined, { slug });
+        return result.length > 0
       }
 
-      const slugCheck = await resolvers.Query.link(undefined, { slug });
-      if (slugCheck.length > 0) throw new Error('slug already exists')
+      async function generateSlug() {
+        slug = Math.random().toString(24).slice(-6);
+        if (await slugCheck()) generateSlug();
+      }
+
+      if (!slug) generateSlug();
+      else if (await slugCheck()) throw new Error("slug already exists");
 
       models.Link.create({ url, slug });
     }
