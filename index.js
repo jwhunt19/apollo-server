@@ -29,11 +29,11 @@ const resolvers = {
     setLink: async (_, { url, slug }) => {
       async function slugCheck() {
         const result = await resolvers.Query.link(undefined, { slug });
-        return result.length > 0
+        return result.length > 0;
       }
 
       async function generateSlug() {
-        slug = Math.random().toString(24).slice(-6);
+        slug = Math.random().toString(24).slice(-4);
         if (await slugCheck()) generateSlug();
       }
 
